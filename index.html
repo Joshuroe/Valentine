@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine</title>
+
+<!-- Bebas Neue hanya untuk headline -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+<!-- Confetti -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#bgVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Kotak putih full + glow border */
+.container {
+    position: relative;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 30px;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 0 25px rgba(255,105,180,0.4);
+    animation: glow 2s infinite alternate;
+    overflow: hidden; /* penting supaya tombol tidak keluar */
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 15px rgba(255,105,180,0.4); }
+    to { box-shadow: 0 0 40px rgba(255,105,180,0.9); }
+}
+
+/* Video duck */
+.duck-video {
+    width: 150px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+/* Headline pakai Bebas Neue */
+h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    color: #ff4d6d;
+    font-size: 42px;
+    letter-spacing: 1px;
+}
+
+/* Area tombol */
+.buttons {
+    position: relative;
+    height: 260px; /* lebih tinggi = lompat lebih jauh */
+    margin-top: 20px;
+}
+
+button {
+    padding: 12px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+    font-family: Arial, sans-serif;
+}
+
+#yesBtn {
+    background-color: #ff4d6d;
+    color: white;
+    position: absolute;
+    left: 20%;
+    top: 50%;
+}
+
+#noBtn {
+    background-color: #ddd;
+    position: absolute;
+    left: 65%;
+    top: 50%;
+}
+
+button:hover {
+    transform: scale(1.15);
+}
+
+.hidden {
+    display: none;
+}
+
+.message {
+    font-size: 18px;
+    color: #444;
+    margin-top: 20px;
+}
+
+.love-photo {
+    width: 100%;
+    border-radius: 15px;
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<video autoplay muted loop id="bgVideo">
+    <source src="background.mp4" type="video/mp4">
+</video>
+
+<!-- Question -->
+<div class="container" id="questionBox">
+
+    <!-- Ganti duck.mp4 dengan file kamu -->
+    <video class="duck-video" autoplay loop muted>
+        <source src="duck.mp4" type="video/mp4">
+    </video>
+
+    <h1>Will You Be My Valentine? ❤️</h1>
+
+    <div class="buttons" id="buttonArea">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+    </div>
+
+</div>
+
+<!-- Love screen -->
+<div class="container hidden" id="loveBox">
+
+    <h1>Happy Valentine's Day Fredericka! ❤️</h1>
+
+    <p class="message">
+        Semoga bisa kita rayakan offline di tahun mendatang!<br>
+        Love you from Indonesia!
+    </p>
+
+    <!-- Ganti foto.jpg -->
+    <img src="foto.jpg" class="love-photo" alt="Our Photo">
+
+</div>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const questionBox = document.getElementById("questionBox");
+const loveBox = document.getElementById("loveBox");
+const buttonArea = document.getElementById("buttonArea");
+
+const noTexts = [
+    "Lah mau nolak?",
+    "HAHAHA",
+    "Coba kejer!",
+    "Wkwk😁😜",
+    "Ngapain sih Fer?",
+    "Kamu gila ya nolak aku",
+    "PHEYYYY"
+];
+
+/* YES click */
+yesBtn.addEventListener("click", () => {
+    questionBox.classList.add("hidden");
+    loveBox.classList.remove("hidden");
+
+    confetti({
+        particleCount: 200,
+        spread: 100,
+        origin: { y: 0.6 }
+    });
+});
+
+/* Gerakan NO jauh tapi tetap di dalam kotak */
+function moveNoButton() {
+
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+
+    // ukuran layar browser
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // jarak aman dari tepi layar
+    const margin = 20;
+
+    const x = Math.random() * (screenWidth - btnWidth - margin);
+    const y = Math.random() * (screenHeight - btnHeight - margin);
+
+    noBtn.style.position = "fixed"; // penting!
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    const randomText = noTexts[Math.floor(Math.random() * noTexts.length)];
+    noBtn.textContent = randomText;
+}
+
+noBtn.addEventListener("mouseover", moveNoButton);
+noBtn.addEventListener("click", moveNoButton);
+</script>
+
+</body>
+</html>
